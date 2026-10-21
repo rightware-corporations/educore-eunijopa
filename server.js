@@ -1,8 +1,8 @@
-const http = require('node:http');
-const fs = require('node:fs');
-const path = require('node:path');
+const http = require('http');
+const fs = require('fs');
+const path = require('path');
 
-const root = path.resolve(__dirname);
+const root = __dirname;
 const port = Number(process.env.PORT || 3000);
 const mime = {
   '.html': 'text/html; charset=utf-8',
@@ -15,55 +15,61 @@ const mime = {
   '.svg': 'image/svg+xml',
   '.ico': 'image/x-icon'
 };
-const routes = { '/': '/index.html', '/portal': '/portal.html', '/portal/': '/portal.html' };
 
-function safePath(rawUrl) {
-  let pathname;
-  try {
-    pathname = decodeURIComponent(new URL(rawUrl, 'http://localhost').pathname);
-  } catch {
-    return null;
-  }
-  if (pathname.includes('\\') || pathname.includes('\0')) return null;
-  const requested = routes[pathname] || pathname;
-  const resolved = path.resolve(root, '.' + requested);
-  if (resolved !== root && !resolved.startsWith(root + path.sep)) return null;
-  return resolved;
+function safePath(urlPath) {
+  const clean = decodeURIComponent(urlPath.split('?')[0]);
+  const requested = clean === '/' ? '/index.html' : clean === '/portal' || clean === '/portal/' ? '/portal.html' : clean;
+  const full = path.normalize(path.join(root, requested));
+  return full.startsWith(root) ? full : null;
 }
 
-const server = http.createServer((req, res) => {
-  if (req.method !== 'GET' && req.method !== 'HEAD') {
-    res.writeHead(405, { Allow: 'GET, HEAD' });
-    return res.end();
+function serveEncodedAsset(urlPath, res) {
+  if (!urlPath.startsWith('/assets/') || !urlPath.endsWith('.webp')) return false;
+  const name = path.basename(urlPath, '.webp');
+  const encodedPath = path.join(root, 'assets-src', name + '.b64');
+  if (!fs.existsSync(encodedPath)) return false;
+
+  try {
+    const encoded = fs.readFileSync(encodedPath, 'utf8').replace(/\s+/g, '');
+    const data = Buffer.from(encoded, 'base64');
+    res.writeHead(200, {
+      'Content-Type': 'image/webp',
+      'Content-Length': data.length,
+      'Cache-Control': 'public, max-age=86400'
+    });
+    res.end(data);
+    return true;
+  } catch {
+    return false;
   }
-  const file = safePath(req.url || '/');
+}
+
+http.createServer((req, res) => {
+  const rawUrl = req.url || '/';
+  const cleanUrl = decodeURIComponent(rawUrl.split('?')[0]);
+  const file = safePath(rawUrl);
   if (!file) {
     res.writeHead(400);
     return res.end('Bad request');
   }
+
   fs.stat(file, (err, stat) => {
-    if (err || !stat.isFile()) {
-      res.writeHead(404, { 'Content-Type': 'text/plain; charset=utf-8' });
-      return res.end(req.method === 'HEAD' ? undefined : 'Not found');
-    }
-    fs.realpath(file, (realErr, realPath) => {
-      if (realErr || (realPath !== root && !realPath.startsWith(root + path.sep))) {
-        res.writeHead(403);
-        return res.end();
+    let target = file;
+    if (!err && stat.isDirectory()) target = path.join(file, 'index.html');
+
+    fs.readFile(target, (readErr, data) => {
+      if (readErr) {
+        if (serveEncodedAsset(cleanUrl, res)) return;
+        res.writeHead(404, { 'Content-Type': 'text/plain; charset=utf-8' });
+        return res.end('Not found');
       }
-      fs.readFile(realPath, (readErr, data) => {
-        if (readErr) {
-          res.writeHead(500);
-          return res.end();
-        }
-        res.writeHead(200, {
-          'Content-Type': mime[path.extname(realPath).toLowerCase()] || 'application/octet-stream',
-          'Cache-Control': path.extname(realPath) === '.html' ? 'no-cache' : 'public, max-age=86400',
-          'X-Content-Type-Options': 'nosniff'
-        });
-        res.end(req.method === 'HEAD' ? undefined : data);
+      res.writeHead(200, {
+        'Content-Type': mime[path.extname(target).toLowerCase()] || 'application/octet-stream',
+        'Cache-Control': path.extname(target) === '.html' ? 'no-cache' : 'public, max-age=86400'
       });
+      res.end(data);
     });
   });
+}).listen(port, '0.0.0.0', () => {
+  console.log(`EUNIJOPA EduCore MVP listening on ${port}`);
 });
-server.listen(port, '0.0.0.0', () => console.log(`EUNIJOPA EduCore MVP listening on ${port}`));
