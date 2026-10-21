@@ -1,0 +1,8 @@
+{
+  "name": "educore-eunijopa-mvp",
+  "version": "0.1.0",
+  "private": true,
+  "description": "MVP comercial do Centro Infantil e Externato EUNIJOPA, powered by EduCore.",
+  "scripts": { "start": "node server.js" },
+  "engines": { "node": ">=18" }
+}
