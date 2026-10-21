@@ -9,9 +9,6 @@ import { AppRouter } from '@/app/router/appRouter';
 import { isPathEnabledForTenant } from '@/platform/tenancy/entitlements';
 
 const queryClient = new QueryClient();
-function PoweredByEduCore() {
-  return <div className="pointer-events-none fixed bottom-2 right-3 z-[70] hidden rounded-full border border-border/70 bg-background/90 px-2.5 py-1 text-[10px] font-semibold text-muted-foreground shadow-sm backdrop-blur md:block">Powered by EduCore</div>;
-}
 function RoutedExperience() {
   const { activeTenant } = useTenant();
   const { pathname } = useLocation();
@@ -27,7 +24,7 @@ function RoutedExperience() {
       </div>
     );
   }
-  return <><AppRouter /><PoweredByEduCore /></>;
+  return <AppRouter />;
 }
 export default function App() {
   return (

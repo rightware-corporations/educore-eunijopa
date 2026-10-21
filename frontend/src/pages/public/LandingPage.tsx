@@ -10,7 +10,7 @@ const IMG = {
   teaching: '/school/eunijopa-teaching-hd.jpg',
   garden: '/school/eunijopa-garden-hd.jpg',
   campus: '/school/eunijopa-campus-hd.jpg',
-  judo: '/school/eunijopa-judo-hd.jpg',
+  judo: '/school/eunijopa-judo-editorial.jpg',
 };
 const sections = [
   { id: 'escola', label: 'A escola' },
@@ -114,7 +114,7 @@ export default function LandingPage() {
 
         <section className="bg-[#f4e9c9] px-6 py-24 lg:px-[7vw]">
           <div className="mx-auto grid max-w-[1400px] items-center gap-10 lg:grid-cols-2">
-            <div><p className="text-xs font-black uppercase tracking-[.22em] text-[#55724d]">EduCore na EUNIJOPA</p><h2 className="mt-5 text-[clamp(2.7rem,5.2vw,5.6rem)] font-black leading-[1.04] tracking-[-.055em]">Uma escola próxima, também no digital.</h2><p className="mt-7 max-w-xl text-base leading-8 text-[#526455]">Alunos, encarregados, professores e equipas da escola encontram experiências organizadas por função no portal EduCore da EUNIJOPA.</p><Link to="/login" className="mt-8 inline-flex min-h-14 items-center gap-3 rounded-full bg-[#2d553d] px-7 font-extrabold text-white">Entrar no portal <ArrowRight className="h-5 w-5" /></Link><p className="mt-4 text-xs text-[#647161]">Ambiente demonstrativo do MVP.</p></div>
+            <div><p className="text-xs font-black uppercase tracking-[.22em] text-[#55724d]">EduCore na EUNIJOPA</p><h2 className="mt-5 text-[clamp(2.7rem,5.2vw,5.6rem)] font-black leading-[1.04] tracking-[-.055em]">Uma escola próxima, também no digital.</h2><p className="mt-7 max-w-xl text-base leading-8 text-[#526455]">Alunos, encarregados, professores e equipas da escola encontram experiências organizadas por função no portal EduCore da EUNIJOPA.</p><Link to="/login" className="mt-8 inline-flex min-h-14 items-center gap-3 rounded-full bg-[#2d553d] px-7 font-extrabold text-white">Entrar no portal <ArrowRight className="h-5 w-5" /></Link></div>
             <div className="relative mx-auto w-full max-w-lg rounded-[2rem] bg-[#2f5840] p-7 shadow-2xl sm:p-11"><div className="flex items-center gap-3 border-b border-white/20 pb-6"><img src={IMG.logo} alt="" className="h-16 w-16 rounded-full bg-white object-contain p-1" /><div className="text-white"><p className="text-xl font-black">EUNIJOPA</p><p className="text-xs text-white/70">Portal EduCore</p></div></div><div className="mt-7 space-y-4">{[['Aluno','Aprendizagem e percurso'],['Encarregado','Acompanhamento dos educandos'],['Professor','Turmas e avaliações'],['Gestão','Informação por responsabilidade']].map(([a,b])=><div key={a} className="flex items-center justify-between rounded-xl bg-white/10 p-4 text-white"><span className="font-bold">{a}</span><span className="text-xs text-white/70">{b}</span></div>)}</div></div>
           </div>
         </section>

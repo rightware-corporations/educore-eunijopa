@@ -6,7 +6,7 @@ O hero anteriormente usava uma imagem WebP com cerca de 14 KB, insuficiente para
 
 ## Solução
 
-A landing usa as fotografias originais em JPEG do arquivo EUNIJOPA, sem nova compressão. O hero usa a fotografia do grupo de alunos, a abordagem pedagógica usa a fotografia da sala de aula, e a vida escolar usa horta, instalações e judo numa composição integrada. A fotografia de judo é apresentada com corte superior para afastar a legenda publicitária impressa.
+A landing usa as fotografias originais em JPEG do arquivo EUNIJOPA, sem nova compressão. O hero usa a fotografia do grupo de alunos, a abordagem pedagógica usa a fotografia da sala de aula, e a vida escolar usa horta, instalações e judo numa composição integrada. A fotografia de judo inclui o original inalterado e uma segunda versão com corte editorial superior (sem a legenda impressa); a landing usa a versão editorial.
 
 ## Adicionar os ficheiros
 
