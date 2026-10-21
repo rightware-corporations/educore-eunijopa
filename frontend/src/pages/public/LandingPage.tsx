@@ -1,12 +1,16 @@
 import { Link } from 'react-router-dom';
-import { ArrowRight, BookOpen, MapPin, Phone, Sprout, ShieldCheck, Heart, GraduationCap, Menu } from 'lucide-react';
+import { ArrowRight, BookOpen, MapPin, Phone, Sprout, ShieldCheck, Menu } from 'lucide-react';
+import { EunijopaPhoto } from '@/components/brand/EunijopaPhoto';
 import { useState } from 'react';
 
 const IMG = {
   logo: '/school/eunijopa-logo.webp',
-  group: '/school/eunijopa-hero.webp',
-  classroom: '/school/eunijopa-classroom.webp',
-  judo: '/school/eunijopa-judo.webp',
+  group: '/school/eunijopa-hero-hd.jpg',
+  classroom: '/school/eunijopa-classroom-hd.jpg',
+  teaching: '/school/eunijopa-teaching-hd.jpg',
+  garden: '/school/eunijopa-garden-hd.jpg',
+  campus: '/school/eunijopa-campus-hd.jpg',
+  judo: '/school/eunijopa-judo-hd.jpg',
 };
 const sections = [
   { id: 'escola', label: 'A escola' },
@@ -19,7 +23,7 @@ export default function LandingPage() {
   return (
     <div className="min-h-screen bg-[#f8f8f0] text-[#22382a]">
       <header className="absolute left-0 right-0 top-0 z-30">
-        <div className="mx-auto flex max-w-[1600px] items-center justify-between gap-3 px-5 py-5 md:px-12 lg:py-7">
+        <div className="mx-auto flex max-w-[1600px] items-center justify-between gap-2 px-3 py-4 sm:px-5 md:px-12 lg:py-7">
           <Link to="/" aria-label="EUNIJOPA — início" className="flex items-center gap-3 rounded-full bg-white/95 py-2 pl-2 pr-5 shadow-lg backdrop-blur-sm">
             <img src={IMG.logo} alt="Logótipo EUNIJOPA" className="h-12 w-12 rounded-full object-contain sm:h-14 sm:w-14" />
             <span className="leading-tight"><strong className="block text-lg tracking-[.08em] text-[#2f593e]">EUNIJOPA</strong><small className="block text-[10px] font-semibold tracking-wide">Centro Infantil e Externato</small></span>
@@ -28,7 +32,7 @@ export default function LandingPage() {
             {sections.map(item => <a key={item.id} href={'#' + item.id} className="transition-colors hover:text-[#b78e20]">{item.label}</a>)}
           </nav>
           <div className="flex items-center gap-2">
-            <Link to="/login" className="inline-flex min-h-12 items-center gap-2 rounded-full bg-[#f3c242] px-4 text-xs font-extrabold text-[#233b2c] shadow-lg sm:px-6 sm:text-sm">Portal EduCore <ArrowRight className="h-4 w-4" /></Link>
+            <Link to="/login" className="hidden min-h-12 items-center gap-2 rounded-full bg-[#f3c242] px-4 text-xs font-extrabold text-[#233b2c] shadow-lg min-[470px]:inline-flex sm:px-6 sm:text-sm">Portal EduCore <ArrowRight className="h-4 w-4" /></Link>
             <button type="button" aria-label="Abrir navegação" aria-expanded={navOpen} onClick={() => setNavOpen(!navOpen)} className="flex h-12 w-12 items-center justify-center rounded-full bg-white/95 shadow-lg lg:hidden"><Menu className="h-5 w-5" /></button>
           </div>
         </div>
@@ -36,16 +40,16 @@ export default function LandingPage() {
       </header>
 
       <main>
-        <section id="escola" className="relative isolate flex min-h-[820px] items-end overflow-hidden bg-[#274b35] pt-52 text-white sm:min-h-[760px] lg:min-h-[92vh]">
-          <img src={IMG.group} alt="Grupo de alunos da EUNIJOPA, com os uniformes oficiais" fetchPriority="high" className="absolute inset-0 -z-20 h-full w-full object-cover object-center" />
-          <div className="absolute inset-0 -z-10 bg-gradient-to-r from-[#132c21]/95 via-[#183f2c]/72 to-[#133725]/20" />
-          <div className="absolute inset-0 -z-10 bg-gradient-to-t from-[#122b1d]/90 via-transparent to-[#183c2b]/35" />
+        <section id="escola" className="relative isolate flex min-h-[780px] items-end overflow-hidden bg-[#274b35] pt-44 text-white sm:min-h-[760px] lg:min-h-[92vh]">
+          <EunijopaPhoto src={IMG.group} fallback="/school/eunijopa-hero.webp" alt="Alunos da EUNIJOPA com o uniforme da instituição" fetchPriority="high" className="absolute inset-0 -z-20 h-full w-full object-cover object-[55%_center] sm:object-center" />
+          <div className="absolute inset-0 -z-10 bg-gradient-to-r from-[#0f3325]/95 via-[#143b2b]/68 to-transparent" />
+          <div className="absolute inset-0 -z-10 bg-gradient-to-t from-[#122b1d]/75 via-transparent to-[#183c2b]/15" />
           <div className="mx-auto grid w-full max-w-[1600px] items-end gap-9 px-6 pb-20 sm:px-12 lg:grid-cols-[1fr_.5fr] lg:pb-28">
             <div className="max-w-5xl">
               <div className="mb-8 inline-flex items-center gap-2 rounded-full border border-white/25 bg-white/10 px-5 py-3 text-[11px] font-extrabold uppercase tracking-[.22em] backdrop-blur-sm">
                 <Sprout className="h-4 w-4 text-[#f4cf5c]" /> Centro Infantil e Externato
               </div>
-              <h1 className="max-w-4xl text-[clamp(3.25rem,7.6vw,8rem)] font-black leading-[.92] tracking-[-.07em]">Onde cada criança <span className="font-serif font-normal italic text-[#f5d16b]">cresce</span> com confiança.</h1>
+              <h1 className="max-w-[810px] text-[clamp(3rem,6.2vw,7rem)] font-black leading-[.98] tracking-[-.063em]">Onde cada criança <span className="font-serif font-normal italic text-[#f5d16b]">cresce</span> com confiança.</h1>
               <p className="mt-8 max-w-xl text-base leading-8 text-white/90 sm:text-lg">Na EUNIJOPA, aprender é descobrir, experimentar e desenvolver o próprio potencial num ambiente acolhedor e estimulante.</p>
               <div className="mt-9 flex flex-wrap gap-3">
                 <a href="#aprendizagem" className="inline-flex min-h-14 items-center gap-2 rounded-full bg-[#f6c348] px-7 font-extrabold text-[#263a29]">Conhecer a EUNIJOPA <ArrowRight className="h-5 w-5" /></a>
@@ -67,7 +71,7 @@ export default function LandingPage() {
 
         <section id="aprendizagem" className="grid min-h-[670px] items-center gap-12 bg-[#f8f8f0] px-6 py-24 lg:grid-cols-[1fr_1fr] lg:gap-20 lg:px-[7vw]">
           <div className="relative min-h-[430px] overflow-hidden rounded-[9rem_2rem_2rem_2rem] bg-[#e2e9db] sm:min-h-[590px]">
-            <img src={IMG.classroom} alt="Alunos e professora numa sala de aula da EUNIJOPA" loading="lazy" className="absolute inset-0 h-full w-full object-cover" />
+            <EunijopaPhoto src={IMG.classroom} fallback="/school/eunijopa-classroom.webp" alt="Aluna da EUNIJOPA numa sala de aula" loading="lazy" className="absolute inset-0 h-full w-full object-cover object-center" />
             <div className="absolute bottom-7 left-7 rounded-2xl bg-white/95 p-5 text-xs font-extrabold uppercase tracking-[.14em] text-[#2d5740]">Um ambiente para aprender</div>
           </div>
           <div className="max-w-2xl">
@@ -84,10 +88,25 @@ export default function LandingPage() {
         <section id="vida-escolar" className="bg-[#2a4d38] px-6 py-24 text-white lg:px-[7vw]">
           <div className="mx-auto max-w-[1400px]">
             <div className="grid gap-7 md:grid-cols-[1fr_.8fr] md:items-end"><div><p className="text-xs font-black uppercase tracking-[.22em] text-[#f3cd64]">Vida escolar</p><h2 className="mt-4 max-w-3xl text-[clamp(2.7rem,5.2vw,5.6rem)] font-black leading-[1.02] tracking-[-.06em]">O crescimento acontece também fora dos livros.</h2></div><p className="max-w-md text-base leading-8 text-white/75">O movimento, as experiências e a participação fazem parte dos momentos que a escola partilha com a comunidade.</p></div>
-            <div className="relative mt-12 min-h-[410px] overflow-hidden rounded-[2rem] bg-[#45644b] sm:min-h-[580px]">
-              <img src={IMG.judo} alt="Momento de uma conquista de judo divulgado pela EUNIJOPA" loading="lazy" className="absolute inset-0 h-full w-full object-cover object-center" />
-              <div className="absolute inset-0 bg-gradient-to-t from-[#112b20]/90 via-transparent to-transparent" />
-              <div className="absolute bottom-7 left-7 right-7 max-w-xl sm:bottom-11 sm:left-11"><span className="text-xs font-black uppercase tracking-[.2em] text-[#f4cf64]">Conquista partilhada pela escola</span><h3 className="mt-2 text-3xl font-black leading-tight sm:text-5xl">Esforço, coragem e alegria.</h3></div>
+            <div className="mt-12 grid gap-5 lg:grid-cols-[1.2fr_.8fr]">
+              <figure className="relative m-0 min-h-[490px] overflow-hidden rounded-[2rem] bg-[#466849] lg:min-h-[640px]">
+                <EunijopaPhoto src={IMG.garden} fallback="/school/eunijopa-hero.webp" alt="Alunos da EUNIJOPA a cuidar de uma horta na escola" loading="lazy" className="absolute inset-0 h-full w-full object-cover" />
+                <div className="absolute inset-0 bg-gradient-to-t from-[#142d22]/85 via-transparent to-transparent" />
+                <figcaption className="absolute bottom-7 left-7 right-7 sm:bottom-10 sm:left-10">
+                  <span className="text-[11px] font-black uppercase tracking-[.2em] text-[#f8d46a]">Aprendizagem pela descoberta</span>
+                  <strong className="mt-2 block max-w-xl text-3xl font-black leading-tight tracking-tight sm:text-5xl">Cultivar a curiosidade. Cuidar do mundo.</strong>
+                </figcaption>
+              </figure>
+              <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-1">
+                <figure className="relative m-0 min-h-[260px] overflow-hidden rounded-[2rem] bg-[#557459] lg:min-h-[300px]">
+                  <EunijopaPhoto src={IMG.campus} fallback="/school/eunijopa-classroom.webp" alt="Instalações coloridas do Externato EUNIJOPA" loading="lazy" className="absolute inset-0 h-full w-full object-cover" />
+                  <figcaption className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-[#11271d]/80 to-transparent px-7 pb-7 pt-16 text-xl font-black">Um espaço cheio de vida.</figcaption>
+                </figure>
+                <figure className="relative m-0 min-h-[260px] overflow-hidden rounded-[2rem] bg-[#557459] lg:min-h-[300px]">
+                  <EunijopaPhoto src={IMG.judo} fallback="/school/eunijopa-judo.webp" alt="Atleta infantil durante uma competição de judo partilhada pela escola" loading="lazy" className="absolute inset-0 h-full w-full object-cover object-top" />
+                  <figcaption className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-[#11271d]/90 to-transparent px-7 pb-7 pt-20 text-xl font-black">Coragem em movimento.</figcaption>
+                </figure>
+              </div>
             </div>
             <div className="mt-11 flex flex-wrap items-center gap-8 border-t border-white/20 pt-9"><Sprout className="h-10 w-10 text-[#f3ca59]" /><p className="max-w-3xl text-base leading-8 text-white/85">A comunicação da EUNIJOPA valoriza a aprendizagem através da diversão, da expressão artística, da música e do movimento.</p></div>
           </div>

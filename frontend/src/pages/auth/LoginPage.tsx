@@ -4,6 +4,7 @@ import { ArrowLeft, ArrowRight, Eye, EyeOff, GraduationCap, Users, BookOpen, Sch
 import { useAuth } from '@/contexts/AuthContext';
 import type { UserRole } from '@/types/roles';
 import { ROLE_HOME } from '@/types/roles';
+import { EunijopaPhoto } from '@/components/brand/EunijopaPhoto';
 
 const options: { role: UserRole; title: string; description: string; Icon: typeof GraduationCap }[] = [
   { role: 'student', title: 'Aluno', description: 'Notas, horário e percurso', Icon: GraduationCap },
@@ -38,7 +39,7 @@ export default function LoginPage() {
   return (
     <div className="min-h-screen bg-[#fafaf4] text-[#284630] lg:grid lg:grid-cols-[.85fr_1.15fr]">
       <aside className="relative hidden min-h-screen overflow-hidden bg-[#2b553d] text-white lg:flex lg:flex-col">
-        <img src="/school/eunijopa-classroom.webp" alt="Ambiente de aprendizagem na EUNIJOPA" className="absolute inset-0 h-full w-full object-cover opacity-50" />
+        <EunijopaPhoto src="/school/eunijopa-teaching-hd.jpg" fallback="/school/eunijopa-classroom.webp" alt="Sala de aula da EUNIJOPA" className="absolute inset-0 h-full w-full object-cover opacity-65" />
         <div className="absolute inset-0 bg-gradient-to-t from-[#193f2a] via-[#1a402a]/80 to-[#284c36]/60" />
         <div className="relative z-10 flex flex-1 flex-col justify-between p-12 xl:p-16">
           <Link to="/" className="inline-flex items-center gap-2 text-sm font-bold text-white/90"><ArrowLeft className="h-4 w-4" /> Voltar ao site</Link>
