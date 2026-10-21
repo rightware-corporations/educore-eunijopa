@@ -47,8 +47,8 @@ export function TenantProvider({ children }: { children: ReactNode }) {
       link.rel = 'icon';
       document.head.appendChild(link);
     }
-    link.type = 'image/webp';
-    link.href = '/school/eunijopa-logo.webp';
+    link.type = 'image/jpeg';
+    link.href = '/school/eunijopa-logo-original.jpg';
   }, []);
   return <SchoolContext.Provider value={value}>{children}</SchoolContext.Provider>;
 }

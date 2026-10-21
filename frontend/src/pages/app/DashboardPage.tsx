@@ -10,7 +10,7 @@ import { QuickActionCard } from '@/components/dashboard/QuickActionCard';
 import { FeedPreviewCard } from '@/components/dashboard/FeedPreviewCard';
 import { FinanceSummaryCard } from '@/components/dashboard/FinanceSummaryCard';
 import { LoadingState } from '@/components/states/LoadingState';
-const campusMain = '/school/eunijopa-classroom.webp';
+const campusMain = '/school/eunijopa-classroom-hd.jpg';
 
 const stats = [
   { label: 'Students', value: '2,635', icon: Users, variant: 'primary' as const, trend: '+12% this term', trendUp: true },

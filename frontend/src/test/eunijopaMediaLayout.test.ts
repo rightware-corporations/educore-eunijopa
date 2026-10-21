@@ -11,8 +11,11 @@ describe('EUNIJOPA — fotografia e narrativa editorial', () => {
     expect(landing).toContain('eunijopa-classroom-hd.jpg');
     expect(landing).toContain('eunijopa-garden-hd.jpg');
     expect(landing).toContain('eunijopa-campus-hd.jpg');
-    expect(landing).toContain('eunijopa-judo-editorial.jpg');
+    expect(landing).toContain('eunijopa-judo-hd.jpg');
+    expect(landing).toContain('eunijopa-enrollment-2026.jpg');
+    expect(landing).toContain('eunijopa-infant-center-2026.jpg');
     expect(landing).toContain('EunijopaPhoto');
+    expect(landing).not.toContain('fallback=');
   });
   it('não coloca informação técnica sobre as fotografias', () => {
     const landing = read('src/pages/public/LandingPage.tsx');

@@ -39,17 +39,17 @@ export default function LoginPage() {
   return (
     <div className="min-h-screen bg-[#fafaf4] text-[#284630] lg:grid lg:grid-cols-[.85fr_1.15fr]">
       <aside className="relative hidden min-h-screen overflow-hidden bg-[#2b553d] text-white lg:flex lg:flex-col">
-        <EunijopaPhoto src="/school/eunijopa-teaching-hd.jpg" fallback="/school/eunijopa-classroom.webp" alt="Sala de aula da EUNIJOPA" className="absolute inset-0 h-full w-full object-cover opacity-65" />
+        <EunijopaPhoto src="/school/eunijopa-teaching-hd.jpg" alt="Sala de aula da EUNIJOPA" className="absolute inset-0 h-full w-full object-cover opacity-65" />
         <div className="absolute inset-0 bg-gradient-to-t from-[#193f2a] via-[#1a402a]/80 to-[#284c36]/60" />
         <div className="relative z-10 flex flex-1 flex-col justify-between p-12 xl:p-16">
           <Link to="/" className="inline-flex items-center gap-2 text-sm font-bold text-white/90"><ArrowLeft className="h-4 w-4" /> Voltar ao site</Link>
-          <div><div className="mb-8 inline-flex rounded-full bg-white p-3"><img src="/school/eunijopa-logo.webp" alt="Logótipo EUNIJOPA" className="h-24 w-24 object-contain" /></div><p className="text-xs font-black uppercase tracking-[.25em] text-[#f1cd58]">EUNIJOPA · EduCore</p><h1 className="mt-5 text-[clamp(3.5rem,5.2vw,6.7rem)] font-black leading-[.96] tracking-[-.06em]">O seu mundo escolar, num só lugar.</h1><p className="mt-7 max-w-md text-lg leading-8 text-white/85">Uma experiência digital própria da EUNIJOPA para cada papel na comunidade educativa.</p></div>
+          <div><div className="mb-8 inline-flex rounded-full bg-white p-3"><img src="/school/eunijopa-logo-original.jpg" alt="Logótipo EUNIJOPA" className="h-24 w-24 object-contain" /></div><p className="text-xs font-black uppercase tracking-[.25em] text-[#f1cd58]">EUNIJOPA · EduCore</p><h1 className="mt-5 text-[clamp(3.5rem,5.2vw,6.7rem)] font-black leading-[.96] tracking-[-.06em]">O seu mundo escolar, num só lugar.</h1><p className="mt-7 max-w-md text-lg leading-8 text-white/85">Uma experiência digital própria da EUNIJOPA para cada papel na comunidade educativa.</p></div>
           <span className="text-xs text-white/70">Centro Infantil e Externato EUNIJOPA</span>
         </div>
       </aside>
       <main className="flex min-h-screen items-center justify-center px-5 py-12 sm:px-9 lg:px-12 xl:px-20">
         <div className="w-full max-w-[790px]">
-          <div className="mb-10 flex items-center justify-between lg:hidden"><Link to="/" className="flex items-center gap-3"><img src="/school/eunijopa-logo.webp" alt="EUNIJOPA" className="h-14 w-14 object-contain" /><span className="text-xl font-black">EUNIJOPA</span></Link><Link to="/" className="text-sm font-bold">Voltar</Link></div>
+          <div className="mb-10 flex items-center justify-between lg:hidden"><Link to="/" className="flex items-center gap-3"><img src="/school/eunijopa-logo-original.jpg" alt="EUNIJOPA" className="h-14 w-14 object-contain" /><span className="text-xl font-black">EUNIJOPA</span></Link><Link to="/" className="text-sm font-bold">Voltar</Link></div>
           <p className="text-xs font-black uppercase tracking-[.22em] text-[#698449]">Portal EUNIJOPA</p>
           <h2 className="mt-4 text-[clamp(2.5rem,3.5vw,4.5rem)] font-black leading-tight tracking-[-.05em]">Como pretende entrar?</h2>
           <p className="mt-3 max-w-2xl text-sm leading-7 text-[#64766a]">Escolha o seu perfil para explorar as funcionalidades do EduCore no contexto da EUNIJOPA.</p>

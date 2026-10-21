@@ -29,12 +29,11 @@ describe('EUNIJOPA — apresentação escolar independente', () => {
     expect(violations).toEqual([]);
   });
   it('referencia assets binários oficiais da EUNIJOPA, não Data URI', () => {
-    for (const name of ['eunijopa-logo.webp','eunijopa-hero.webp','eunijopa-classroom.webp','eunijopa-judo.webp']) {
+    for (const name of ['eunijopa-logo-original.jpg','eunijopa-hero-hd.jpg','eunijopa-classroom-hd.jpg','eunijopa-teaching-hd.jpg','eunijopa-garden-hd.jpg','eunijopa-campus-hd.jpg','eunijopa-judo-hd.jpg','eunijopa-enrollment-2026.jpg','eunijopa-infant-center-2026.jpg']) {
       const file = join(root, 'public', 'school', name);
       expect(existsSync(file)).toBe(true);
       const bytes = readFileSync(file);
-      expect(bytes.subarray(0, 4).toString()).toBe('RIFF');
-      expect(bytes.subarray(8, 12).toString()).toBe('WEBP');
+      expect(bytes.subarray(0, 2).toString('hex')).toBe('ffd8');
     }
   });
   it('publica metadados da escola e não expõe admin multi-escola', () => {
@@ -42,6 +41,6 @@ describe('EUNIJOPA — apresentação escolar independente', () => {
     expect(html).toMatch(/EUNIJOPA/);
     expect(html).toMatch(/og:image/);
     const app = readFileSync(join(root,'src','App.tsx'),'utf8');
-    expect(app).not.toMatch(/PlatformAdminPage|pathname\.startsWith\(['\"]\/platform/);
+    expect(app).not.toMatch(/PlatformAdminPage|pathname\.startsWith\(['"]\/platform/);
   });
 });
