@@ -1,75 +1,65 @@
-const http = require('http');
-const fs = require('fs');
-const path = require('path');
+const http = require('node:http');
+const fs = require('node:fs');
+const path = require('node:path');
 
-const root = __dirname;
+const dist = path.resolve(__dirname, 'frontend', 'dist');
 const port = Number(process.env.PORT || 3000);
 const mime = {
   '.html': 'text/html; charset=utf-8',
   '.css': 'text/css; charset=utf-8',
   '.js': 'text/javascript; charset=utf-8',
   '.webp': 'image/webp',
-  '.png': 'image/png',
   '.jpg': 'image/jpeg',
   '.jpeg': 'image/jpeg',
+  '.png': 'image/png',
+  '.ico': 'image/x-icon',
   '.svg': 'image/svg+xml',
-  '.ico': 'image/x-icon'
+  '.woff2': 'font/woff2',
+  '.json': 'application/json; charset=utf-8'
 };
-
-function safePath(urlPath) {
-  const clean = decodeURIComponent(urlPath.split('?')[0]);
-  const requested = clean === '/' ? '/index.html' : clean === '/portal' || clean === '/portal/' ? '/portal.html' : clean;
-  const full = path.normalize(path.join(root, requested));
-  return full.startsWith(root) ? full : null;
+function reply(res, status, content) {
+  res.writeHead(status, { 'Content-Type': 'text/plain; charset=utf-8', 'X-Content-Type-Options': 'nosniff' });
+  return res.end(content);
 }
-
-function serveEncodedAsset(urlPath, res) {
-  if (!urlPath.startsWith('/assets/') || !urlPath.endsWith('.webp')) return false;
-  const name = path.basename(urlPath, '.webp');
-  const encodedPath = path.join(root, 'assets-src', name + '.b64');
-  if (!fs.existsSync(encodedPath)) return false;
-
+const server = http.createServer((req, res) => {
+  if (req.method !== 'GET' && req.method !== 'HEAD') {
+    res.writeHead(405, { Allow: 'GET, HEAD' });
+    return res.end();
+  }
+  let pathname;
   try {
-    const encoded = fs.readFileSync(encodedPath, 'utf8').replace(/\s+/g, '');
-    const data = Buffer.from(encoded, 'base64');
-    res.writeHead(200, {
-      'Content-Type': 'image/webp',
-      'Content-Length': data.length,
-      'Cache-Control': 'public, max-age=86400'
-    });
-    res.end(data);
-    return true;
+    pathname = decodeURIComponent(new URL(req.url || '/', 'http://localhost').pathname);
   } catch {
-    return false;
+    return reply(res, 400, 'Bad request');
   }
-}
-
-http.createServer((req, res) => {
-  const rawUrl = req.url || '/';
-  const cleanUrl = decodeURIComponent(rawUrl.split('?')[0]);
-  const file = safePath(rawUrl);
-  if (!file) {
-    res.writeHead(400);
-    return res.end('Bad request');
+  if (pathname === '/health') return reply(res, 200, 'eunijopa');
+  if (pathname.includes('\\') || pathname.includes('\0') || pathname.split('/').some(part => part.startsWith('.') && part !== '.')) {
+    return reply(res, 400, 'Bad request');
   }
-
-  fs.stat(file, (err, stat) => {
-    let target = file;
-    if (!err && stat.isDirectory()) target = path.join(file, 'index.html');
-
-    fs.readFile(target, (readErr, data) => {
-      if (readErr) {
-        if (serveEncodedAsset(cleanUrl, res)) return;
-        res.writeHead(404, { 'Content-Type': 'text/plain; charset=utf-8' });
-        return res.end('Not found');
-      }
-      res.writeHead(200, {
-        'Content-Type': mime[path.extname(target).toLowerCase()] || 'application/octet-stream',
-        'Cache-Control': path.extname(target) === '.html' ? 'no-cache' : 'public, max-age=86400'
+  const requested = pathname === '/' ? '/index.html' : pathname;
+  let target = path.resolve(dist, '.' + requested);
+  if (target !== dist && !target.startsWith(dist + path.sep)) return reply(res, 403, 'Forbidden');
+  if (!fs.existsSync(path.join(dist, 'index.html'))) {
+    return reply(res, 503, 'EUNIJOPA build indisponível. Execute npm run build antes de iniciar o servidor.');
+  }
+  fs.stat(target, (err, stat) => {
+    if (err || !stat.isFile()) {
+      if (path.extname(requested)) return reply(res, 404, 'Not found');
+      target = path.join(dist, 'index.html');
+    }
+    fs.realpath(target, (realErr, realPath) => {
+      if (realErr || (realPath !== dist && !realPath.startsWith(dist + path.sep))) return reply(res, 403, 'Forbidden');
+      fs.readFile(realPath, (readErr, data) => {
+        if (readErr) return reply(res, 500, 'Internal server error');
+        const ext = path.extname(realPath).toLowerCase();
+        res.writeHead(200, {
+          'Content-Type': mime[ext] || 'application/octet-stream',
+          'X-Content-Type-Options': 'nosniff',
+          'Cache-Control': ext === '.html' ? 'no-cache' : 'public, max-age=86400',
+        });
+        return res.end(req.method === 'HEAD' ? undefined : data);
       });
-      res.end(data);
     });
   });
-}).listen(port, '0.0.0.0', () => {
-  console.log(`EUNIJOPA EduCore MVP listening on ${port}`);
 });
+server.listen(port, '0.0.0.0', () => console.log('EUNIJOPA EduCore running on port ' + port));

@@ -1,38 +1,36 @@
-# EduCore — Centro Infantil e Externato EUNIJOPA
+# EUNIJOPA — EduCore
 
-MVP comercial isolado da experiência **EUNIJOPA**, powered by EduCore.
+Implementação independente do **Centro Infantil e Externato EUNIJOPA**, construída a partir dos módulos EduCore v1.1 para o MVP comercial.
 
-## Objectivo
+## Estrutura
 
-Apresentação rápida para demonstração comercial: landing institucional + portal EduCore demonstrativo, com identidade e media reais da escola.
+- `frontend/` — aplicação React/Vite, landing EUNIJOPA, entrada e sete áreas de trabalho EduCore
+- `frontend/public/school/` — imagens próprias da escola
+- `server.js` — servidor de produção do frontend compilado
+- `docs/` — contexto de transferência e decisões da implementação
 
-## Estratégia de projecto
-
-- uma escola;
-- um repositório;
-- branch principal `main`;
-- um deployment próprio;
-- sem selector multi-tenant neste MVP.
-
-## Execução
+## Executar
 
 ```bash
+npm run build
 npm start
 ```
 
-A aplicação usa apenas Node.js nativo, sem dependências externas de runtime. A porta é lida de `PORT` (Railway) e usa `3000` localmente.
+Build: `npm --prefix frontend ci && npm --prefix frontend run build`
 
-## Conteúdo confirmado a partir dos materiais fornecidos
+Desenvolvimento: `cd frontend && npm ci && npm run dev`
 
-- Centro Infantil e Externato EUNIJOPA;
-- Ensino Pré-escolar e Ensino Primário;
-- inscrições anunciadas para 2026;
-- professores qualificados e dedicados;
-- ambiente seguro, acolhedor e estimulante;
-- actividades extracurriculares;
-- turmas reduzidas / acompanhamento próximo;
-- Centro Infantil para crianças dos 1 aos 5 anos;
-- aprendizagem através de diversão, expressão artística, música e movimento;
-- localização apresentada: Matola-rio, Av. da Namaacha, Thandavando.
+Testes: `npm test`
 
-Ver `docs/EUNIJOPA_MVP_HANDOFF.md`.
+Railway: repositório `rightware-corporations/educore-eunijopa`, branch `main`, build command `npm run build`, start command `npm start`. URL/domínio próprios da EUNIJOPA.
+
+## Identidade e isolamento
+
+- Só existe a escola EUNIJOPA nesta instalação; não existe seletor de escolas.
+- `/login` dá acesso à demonstração por perfil; **a autenticação é demonstrativa**, não contém utilizadores reais nem controlo de acesso de produção.
+- Conteúdos escolares reais e os módulos internos EduCore reutilizados permanecem separados; os dados do portal são de demonstração.
+- Nunca devem ser exibidas marcas, contactos, dados ou ativos de outras instituições.
+
+## Antes do deployment
+
+Executar build/testes, confirmar todos os assets, QA desktop/mobile, navegação nos sete perfis e pré-visualizações da URL definitiva. Validação real de API/backend fica fora desta apresentação demonstrativa.

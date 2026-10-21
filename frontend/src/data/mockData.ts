@@ -1,4 +1,4 @@
-/* ─── Colégio Deus Connosco — Dados Centralizados (Moçambique) ─── */
+/* ─── Centro Infantil e Externato EUNIJOPA — Dados Centralizados (Moçambique) ─── */
 
 export interface Student {
   id: string;

@@ -10,7 +10,7 @@ import { QuickActionCard } from '@/components/dashboard/QuickActionCard';
 import { FeedPreviewCard } from '@/components/dashboard/FeedPreviewCard';
 import { FinanceSummaryCard } from '@/components/dashboard/FinanceSummaryCard';
 import { LoadingState } from '@/components/states/LoadingState';
-import campusMain from '@/assets/school/campus-main.jpg';
+const campusMain = '/school/eunijopa-classroom.webp';
 
 const stats = [
   { label: 'Students', value: '2,635', icon: Users, variant: 'primary' as const, trend: '+12% this term', trendUp: true },
@@ -81,11 +81,11 @@ export default function DashboardPage() {
     <PageContainer>
       {/* Hero banner */}
       <div className="relative mb-6 overflow-hidden rounded-2xl">
-        <img src={campusMain} alt="Campus do Colégio Deus Connosco" className="h-40 w-full object-cover md:h-48" />
+        <img src={campusMain} alt="Ambiente escolar EUNIJOPA" className="h-40 w-full object-cover md:h-48" />
         <div className="absolute inset-0 bg-gradient-to-r from-foreground/60 to-transparent" />
         <div className="absolute bottom-4 left-5 md:bottom-6 md:left-8">
           <h1 className="font-heading text-xl font-bold text-primary-foreground md:text-2xl">Bem-vindo de volta</h1>
-          <p className="mt-0.5 text-sm text-primary-foreground/80">Colégio Deus Connosco — Tudo num só lugar</p>
+          <p className="mt-0.5 text-sm text-primary-foreground/80">Centro Infantil e Externato EUNIJOPA — Tudo num só lugar</p>
         </div>
       </div>
 

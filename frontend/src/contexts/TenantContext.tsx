@@ -1,8 +1,8 @@
-import { createContext, useCallback, useContext, useEffect, useMemo, useState, type ReactNode } from 'react';
-import { ALL_TENANT_ROLES, CORE_TENANT_MODULES, DEFAULT_TENANTS } from '@/data/tenants';
+import { createContext, useContext, useEffect, type ReactNode } from 'react';
+import { EUNIJOPA_SCHOOL } from '@/data/tenants';
 import type { CreateTenantInput, TenantConfig, TenantModule } from '@/types/tenant';
 
-interface TenantContextValue {
+interface SchoolContextValue {
   tenants: TenantConfig[];
   activeTenant: TenantConfig;
   activeTenantId: string;
@@ -12,192 +12,48 @@ interface TenantContextValue {
   setModuleEnabled: (tenantId: string, module: TenantModule, enabled: boolean) => void;
   resetPreviewTenants: () => void;
 }
+const SchoolContext = createContext<SchoolContextValue | null>(null);
 
-const TenantContext = createContext<TenantContextValue | null>(null);
-const TENANTS_STORAGE_KEY = 'educore.preview.tenants.v1';
-const ACTIVE_TENANT_KEY = 'educore.preview.active-tenant.v1';
-const PASCOA_DEPLOYMENT_HOSTNAME = 'educore-colegiopascoa.up.railway.app';
-
-function isPascoaDeployment() {
-  return typeof window !== 'undefined' && window.location.hostname === PASCOA_DEPLOYMENT_HOSTNAME;
+// Preserve the EduCore provider contract for internal screens, but disable
+// tenant mutation/switching in this one-school presentation deployment.
+function unavailable(): never {
+  throw new Error('Esta instalação EduCore é exclusiva da EUNIJOPA.');
 }
-
-function normaliseSlug(value: string) {
-  return value
-    .trim()
-    .toLowerCase()
-    .normalize('NFD')
-    .replace(/[\u0300-\u036f]/g, '')
-    .replace(/[^a-z0-9]+/g, '-')
-    .replace(/(^-|-$)/g, '');
-}
-
-function loadTenants(): TenantConfig[] {
-  if (isPascoaDeployment()) return DEFAULT_TENANTS;
-  try {
-    const raw = localStorage.getItem(TENANTS_STORAGE_KEY);
-    if (!raw) return DEFAULT_TENANTS;
-    const parsed = JSON.parse(raw) as TenantConfig[];
-    return parsed.length > 0 ? parsed : DEFAULT_TENANTS;
-  } catch {
-    return DEFAULT_TENANTS;
-  }
-}
-
-function resolveInitialTenant(tenants: TenantConfig[]) {
-  if (isPascoaDeployment()) {
-    return tenants.find((tenant) => tenant.slug === 'colegio-pascoa')?.id ?? tenants[0].id;
-  }
-  const querySlug = new URLSearchParams(window.location.search).get('tenant');
-  if (querySlug) {
-    const byQuery = tenants.find((tenant) => tenant.slug === querySlug);
-    if (byQuery) return byQuery.id;
-  }
-
-  try {
-    const stored = localStorage.getItem(ACTIVE_TENANT_KEY);
-    if (stored && tenants.some((tenant) => tenant.id === stored)) return stored;
-  } catch {
-    // Preview storage is optional; production resolution will come from the server/domain.
-  }
-
-  return tenants[0].id;
-}
-
-function applyTenantTheme(tenant: TenantConfig) {
-  const root = document.documentElement;
-  root.style.setProperty('--primary', tenant.branding.primaryHsl);
-  root.style.setProperty('--ring', tenant.branding.primaryHsl);
-  root.style.setProperty('--sidebar-background', tenant.branding.sidebarHsl);
-  root.style.setProperty('--sidebar-primary', tenant.branding.accentHsl);
-  root.style.setProperty('--sidebar-ring', tenant.branding.accentHsl);
-  root.style.setProperty('--brand-orange', tenant.branding.accentHsl);
-  document.body.dataset.tenantPreset = tenant.branding.experiencePreset;
-  document.title = isPascoaDeployment() ? 'Colégio Páscoa | EduCore' : `${tenant.branding.displayName} · EduCore`;
-
-  if (tenant.branding.favicon) {
+const value: SchoolContextValue = {
+  tenants: [EUNIJOPA_SCHOOL],
+  activeTenant: EUNIJOPA_SCHOOL,
+  activeTenantId: EUNIJOPA_SCHOOL.id,
+  setActiveTenant: unavailable,
+  createTenant: unavailable,
+  updateTenant: unavailable,
+  setModuleEnabled: unavailable,
+  resetPreviewTenants: unavailable,
+};
+export function TenantProvider({ children }: { children: ReactNode }) {
+  useEffect(() => {
+    const { branding } = EUNIJOPA_SCHOOL;
+    const root = document.documentElement;
+    root.style.setProperty('--primary', branding.primaryHsl);
+    root.style.setProperty('--ring', branding.primaryHsl);
+    root.style.setProperty('--sidebar-background', branding.sidebarHsl);
+    root.style.setProperty('--sidebar-primary', branding.accentHsl);
+    root.style.setProperty('--sidebar-ring', branding.accentHsl);
+    root.style.setProperty('--brand-orange', branding.accentHsl);
+    document.body.dataset.tenantPreset = branding.experiencePreset;
+    document.title = 'EUNIJOPA | EduCore';
     let link = document.querySelector<HTMLLinkElement>('link[rel="icon"]');
     if (!link) {
       link = document.createElement('link');
       link.rel = 'icon';
       document.head.appendChild(link);
     }
-    link.href = isPascoaDeployment() ? '/tenants/colegio-pascoa/pascoa-logo.jpg' : tenant.branding.favicon;
-  }
+    link.type = 'image/webp';
+    link.href = '/school/eunijopa-logo.webp';
+  }, []);
+  return <SchoolContext.Provider value={value}>{children}</SchoolContext.Provider>;
 }
-
-export function TenantProvider({ children }: { children: ReactNode }) {
-  const [tenants, setTenants] = useState<TenantConfig[]>(() => loadTenants());
-  const [activeTenantId, setActiveTenantId] = useState(() => resolveInitialTenant(loadTenants()));
-
-  const activeTenant = useMemo(
-    () => isPascoaDeployment()
-      ? tenants.find((tenant) => tenant.slug === 'colegio-pascoa') ?? DEFAULT_TENANTS[1]
-      : tenants.find((tenant) => tenant.id === activeTenantId) ?? tenants[0] ?? DEFAULT_TENANTS[0],
-    [tenants, activeTenantId],
-  );
-
-  useEffect(() => {
-    try {
-      localStorage.setItem(TENANTS_STORAGE_KEY, JSON.stringify(tenants));
-    } catch {
-      // Preview persistence can fail in private/restricted storage without blocking the app.
-    }
-  }, [tenants]);
-
-  useEffect(() => {
-    try {
-      localStorage.setItem(ACTIVE_TENANT_KEY, activeTenant.id);
-    } catch {
-      // no-op
-    }
-    applyTenantTheme(activeTenant);
-  }, [activeTenant]);
-
-  const setActiveTenant = useCallback((tenantId: string) => {
-    setActiveTenantId((current) => (tenants.some((tenant) => tenant.id === tenantId) ? tenantId : current));
-  }, [tenants]);
-
-  const createTenant = useCallback((input: CreateTenantInput) => {
-    const slug = normaliseSlug(input.slug || input.displayName);
-    const now = new Date().toISOString();
-    const tenant: TenantConfig = {
-      id: `tenant-${Date.now()}`,
-      slug,
-      status: 'draft',
-      legalName: input.legalName,
-      countryCode: 'MZ',
-      locale: 'pt-MZ',
-      timezone: 'Africa/Maputo',
-      currency: 'MZN',
-      branding: {
-        displayName: input.displayName,
-        shortName: input.shortName || input.displayName,
-        descriptor: 'Instituição de Ensino',
-        primaryHsl: input.primaryHsl || '222 47% 18%',
-        accentHsl: input.accentHsl || '160 84% 32%',
-        sidebarHsl: input.primaryHsl || '222 47% 18%',
-        experiencePreset: input.experiencePreset || 'institutional',
-      },
-      enabledRoles: ALL_TENANT_ROLES,
-      enabledModules: CORE_TENANT_MODULES,
-      publicExperience: {
-        landingEnabled: true,
-        applicationsEnabled: true,
-        commerceEnabled: false,
-        poweredByEduCore: true,
-      },
-      createdAt: now,
-    };
-
-    setTenants((current) => {
-      if (current.some((item) => item.slug === slug)) return current;
-      return [...current, tenant];
-    });
-    setActiveTenantId(tenant.id);
-    return tenant;
-  }, []);
-
-  const updateTenant = useCallback((tenantId: string, patch: Partial<TenantConfig>) => {
-    setTenants((current) => current.map((tenant) => tenant.id === tenantId ? { ...tenant, ...patch } : tenant));
-  }, []);
-
-  const setModuleEnabled = useCallback((tenantId: string, module: TenantModule, enabled: boolean) => {
-    setTenants((current) => current.map((tenant) => {
-      if (tenant.id !== tenantId) return tenant;
-      const modules = new Set(tenant.enabledModules);
-      enabled ? modules.add(module) : modules.delete(module);
-      return { ...tenant, enabledModules: Array.from(modules) };
-    }));
-  }, []);
-
-  const resetPreviewTenants = useCallback(() => {
-    setTenants(DEFAULT_TENANTS);
-    setActiveTenantId(isPascoaDeployment() ? DEFAULT_TENANTS[1].id : DEFAULT_TENANTS[0].id);
-    try {
-      localStorage.removeItem(TENANTS_STORAGE_KEY);
-      localStorage.removeItem(ACTIVE_TENANT_KEY);
-    } catch {
-      // no-op
-    }
-  }, []);
-
-  const value = useMemo(() => ({
-    tenants,
-    activeTenant,
-    activeTenantId,
-    setActiveTenant,
-    createTenant,
-    updateTenant,
-    setModuleEnabled,
-    resetPreviewTenants,
-  }), [tenants, activeTenant, activeTenantId, setActiveTenant, createTenant, updateTenant, setModuleEnabled, resetPreviewTenants]);
-
-  return <TenantContext.Provider value={value}>{children}</TenantContext.Provider>;
-}
-
 export function useTenant() {
-  const context = useContext(TenantContext);
+  const context = useContext(SchoolContext);
   if (!context) throw new Error('useTenant must be used within TenantProvider');
   return context;
 }

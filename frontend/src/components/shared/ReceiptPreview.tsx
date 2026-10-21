@@ -27,7 +27,7 @@ export function ReceiptPreview({ open, onOpenChange, receipt }: ReceiptPreviewPr
         <div className="px-6 pb-4">
           <div className="rounded-2xl border border-border bg-card p-5 space-y-4">
             <div className="text-center border-b border-border pb-3">
-              <p className="font-heading text-base font-bold text-foreground">Colégio Deus Connosco</p>
+              <p className="font-heading text-base font-bold text-foreground">Centro Infantil e Externato EUNIJOPA</p>
               <p className="text-[10px] text-muted-foreground">Campoane · Boane · Maputo · +258 84 344 4400</p>
             </div>
             <div className="flex justify-between text-xs">

@@ -10,70 +10,63 @@ interface AuthState {
   logout: () => void;
   getRedirectPath: () => string;
 }
-
 const AuthContext = createContext<AuthState | null>(null);
-const STORAGE_KEY = 'eduos.auth';
-
-const MOCK_USERS: Record<UserRole, UserProfile> = {
-  student: { id: 'ALU-001', name: 'Amélia Mondlane', email: 'amelia@escola.mz', role: 'student', institution: 'Colégio Deus Connosco' },
-  guardian: { id: 'ENC-001', name: 'José Mondlane', email: 'jose@familia.mz', role: 'guardian', institution: 'Colégio Deus Connosco' },
-  teacher: { id: 'PROF-001', name: 'Prof. António Magaia', email: 'antonio@escola.mz', role: 'teacher', institution: 'Colégio Deus Connosco' },
-  pedagogy: { id: 'PED-001', name: 'Prof.ª Ana Costa', email: 'ana@escola.mz', role: 'pedagogy', institution: 'Colégio Deus Connosco' },
-  executive: { id: 'DIR-001', name: 'Dr. Manuel Sitoe', email: 'manuel@escola.mz', role: 'executive', institution: 'Colégio Deus Connosco' },
-  secretary: { id: 'SEC-001', name: 'Laura Tembe', email: 'laura@escola.mz', role: 'secretary', institution: 'Colégio Deus Connosco' },
-  finance: { id: 'FIN-001', name: 'Carlos Mendes', email: 'carlos@escola.mz', role: 'finance', institution: 'Colégio Deus Connosco' },
+const STORAGE_KEY = 'educore.eunijopa.demo.auth.v1';
+const DEMO_USERS: Record<UserRole, UserProfile> = {
+  student: { id: 'DEMO-ALU', name: 'Aluno de demonstração', email: 'aluno@example.invalid', role: 'student', institution: 'EUNIJOPA' },
+  guardian: { id: 'DEMO-ENC', name: 'Encarregado de demonstração', email: 'encarregado@example.invalid', role: 'guardian', institution: 'EUNIJOPA' },
+  teacher: { id: 'DEMO-PROF', name: 'Professor de demonstração', email: 'professor@example.invalid', role: 'teacher', institution: 'EUNIJOPA' },
+  pedagogy: { id: 'DEMO-PED', name: 'Pedagogia de demonstração', email: 'pedagogia@example.invalid', role: 'pedagogy', institution: 'EUNIJOPA' },
+  executive: { id: 'DEMO-DIR', name: 'Direcção de demonstração', email: 'direccao@example.invalid', role: 'executive', institution: 'EUNIJOPA' },
+  secretary: { id: 'DEMO-SEC', name: 'Secretaria de demonstração', email: 'secretaria@example.invalid', role: 'secretary', institution: 'EUNIJOPA' },
+  finance: { id: 'DEMO-FIN', name: 'Finanças de demonstração', email: 'financas@example.invalid', role: 'finance', institution: 'EUNIJOPA' },
 };
-
+function isDemoRole(role: unknown): role is UserRole {
+  return typeof role === 'string' && Object.prototype.hasOwnProperty.call(DEMO_USERS, role);
+}
 export function AuthProvider({ children }: { children: ReactNode }) {
-  const [user, setUser] = useState<UserProfile | null>(null);
   const [role, setRole] = useState<UserRole | null>(null);
-
+  const [email, setEmail] = useState<string | null>(null);
   useEffect(() => {
     try {
-      const raw = localStorage.getItem(STORAGE_KEY);
-      if (raw) {
-        const parsed = JSON.parse(raw);
-        if (parsed.user && parsed.role) {
-          setUser(parsed.user);
-          setRole(parsed.role);
-        }
-      }
-    } catch {
-      try { localStorage.removeItem(STORAGE_KEY); } catch {/* noop */}
-    }
-  }, []);
-
-  const login = useCallback((email: string, _password: string, selectedRole: UserRole, remember = false) => {
-    const mockUser = { ...MOCK_USERS[selectedRole], email: email.trim() || MOCK_USERS[selectedRole].email };
-    setUser(mockUser);
-    setRole(selectedRole);
-
-    try {
-      if (remember) {
-        localStorage.setItem(STORAGE_KEY, JSON.stringify({ user: mockUser, role: selectedRole }));
+      const item = localStorage.getItem(STORAGE_KEY);
+      if (!item) return;
+      const data = JSON.parse(item);
+      if (isDemoRole(data?.role)) {
+        setRole(data.role);
+        setEmail(typeof data.email === 'string' ? data.email : null);
       } else {
         localStorage.removeItem(STORAGE_KEY);
       }
-    } catch {/* noop */}
+    } catch {
+      try { localStorage.removeItem(STORAGE_KEY); } catch { /* demo storage optional */ }
+    }
   }, []);
-
+  const user = role ? { ...DEMO_USERS[role], email: email || DEMO_USERS[role].email } : null;
+  const login = useCallback((nextEmail: string, _password: string, selectedRole: UserRole, remember = false) => {
+    if (!isDemoRole(selectedRole)) return;
+    const currentEmail = nextEmail.trim() || DEMO_USERS[selectedRole].email;
+    setRole(selectedRole);
+    setEmail(currentEmail);
+    try {
+      if (remember) localStorage.setItem(STORAGE_KEY, JSON.stringify({ role: selectedRole, email: currentEmail }));
+      else localStorage.removeItem(STORAGE_KEY);
+    } catch { /* demo storage optional */ }
+  }, []);
   const logout = useCallback(() => {
-    setUser(null);
     setRole(null);
-    try { localStorage.removeItem(STORAGE_KEY); } catch {/* noop */}
+    setEmail(null);
+    try { localStorage.removeItem(STORAGE_KEY); } catch { /* demo storage optional */ }
   }, []);
-
-  const getRedirectPath = useCallback(() => (role ? ROLE_HOME[role] : '/login'), [role]);
-
+  const getRedirectPath = useCallback(() => role ? ROLE_HOME[role] : '/login', [role]);
   return (
-    <AuthContext.Provider value={{ user, role, isAuthenticated: !!user, login, logout, getRedirectPath }}>
+    <AuthContext.Provider value={{ user, role, isAuthenticated: Boolean(role), login, logout, getRedirectPath }}>
       {children}
     </AuthContext.Provider>
   );
 }
-
 export function useAuth() {
-  const ctx = useContext(AuthContext);
-  if (!ctx) throw new Error('useAuth must be used within AuthProvider');
-  return ctx;
+  const auth = useContext(AuthContext);
+  if (!auth) throw new Error('useAuth must be used within AuthProvider');
+  return auth;
 }

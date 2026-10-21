@@ -146,7 +146,7 @@ export function SecretaryStudentDetail() {
       </div>
 
       <ReportPreviewModal open={!!docModal} onOpenChange={(o) => !o && setDocModal(null)} title={docModal ?? ''} period={`${s.name} · ${new Date().toLocaleDateString('pt-PT')}`}>
-        <p className="text-xs text-foreground leading-relaxed">A Direcção do Colégio Deus Connosco declara que <strong>{s.name}</strong>, portador(a) do ID <strong>{s.id}</strong>, está matriculado(a) na turma <strong>{s.classe}ª {s.turma}</strong> no ano lectivo 2025/2026, com aproveitamento médio de <strong>{s.media}/20</strong> e taxa de assiduidade de <strong>{s.taxaAssiduidade}%</strong>.</p>
+        <p className="text-xs text-foreground leading-relaxed">A Direcção do Centro Infantil e Externato EUNIJOPA declara que <strong>{s.name}</strong>, portador(a) do ID <strong>{s.id}</strong>, está matriculado(a) na turma <strong>{s.classe}ª {s.turma}</strong> no ano lectivo 2025/2026, com aproveitamento médio de <strong>{s.media}/20</strong> e taxa de assiduidade de <strong>{s.taxaAssiduidade}%</strong>.</p>
         <p className="text-[10px] text-muted-foreground mt-3">Documento emitido para os devidos efeitos legais.</p>
       </ReportPreviewModal>
     </PageContainer>
@@ -211,7 +211,7 @@ export function SecretaryDocumentBuilder() {
       <button onClick={() => setPreview(true)} className="w-full rounded-xl bg-primary py-3 text-sm font-semibold text-primary-foreground hover:bg-primary/90">Gerar {docLabel}</button>
 
       <ReportPreviewModal open={preview} onOpenChange={setPreview} title={docLabel} period={`${s.name} · ${new Date().toLocaleDateString('pt-PT')}`}>
-        <p className="text-xs text-foreground leading-relaxed">Pela presente <strong>{docLabel}</strong>, a Direcção do Colégio Deus Connosco certifica que <strong>{s.name}</strong> ({s.id}) está regularmente matriculado(a) na turma <strong>{s.classe}ª {s.turma}</strong> no presente ano lectivo, com média actual de <strong>{s.media}/20</strong>.</p>
+        <p className="text-xs text-foreground leading-relaxed">Pela presente <strong>{docLabel}</strong>, a Direcção do Centro Infantil e Externato EUNIJOPA certifica que <strong>{s.name}</strong> ({s.id}) está regularmente matriculado(a) na turma <strong>{s.classe}ª {s.turma}</strong> no presente ano lectivo, com média actual de <strong>{s.media}/20</strong>.</p>
         <p className="text-[10px] text-muted-foreground mt-3 italic">Documento emitido em {new Date().toLocaleDateString('pt-PT', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' })}.</p>
       </ReportPreviewModal>
     </PageContainer>

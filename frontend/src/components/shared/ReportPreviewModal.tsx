@@ -23,7 +23,7 @@ export function ReportPreviewModal({ open, onOpenChange, title, period, children
         <div className="px-6 pb-4 max-h-[60vh] overflow-y-auto">
           <div className="rounded-2xl border border-border bg-card p-5 space-y-3">
             <div className="border-b border-border pb-3 text-center">
-              <p className="font-heading text-sm font-bold text-foreground">Colégio Deus Connosco</p>
+              <p className="font-heading text-sm font-bold text-foreground">Centro Infantil e Externato EUNIJOPA</p>
               <p className="text-[10px] text-muted-foreground">{title} · {period}</p>
             </div>
             {children}

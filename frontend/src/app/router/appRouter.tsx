@@ -1,4 +1,4 @@
-import { Route, Routes, Navigate } from 'react-router-dom';
+import { Route, Routes } from 'react-router-dom';
 import { PublicLayout } from '@/components/layout/PublicLayout';
 import { RoleLayout } from '@/components/layout/RoleLayout';
 import { AuthGuard } from '@/app/guards/AuthGuard';

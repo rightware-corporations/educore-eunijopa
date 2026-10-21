@@ -37,7 +37,7 @@ export function PublicFooter() {
       <div className="mx-auto flex max-w-6xl flex-col gap-4 text-center md:flex-row md:items-center md:justify-between md:text-left">
         <div className="flex items-center justify-center gap-3 md:justify-start">
           <Brand size="sm" />
-          <span className="text-xs text-muted-foreground">© 2026 Colégio Deus Connosco</span>
+          <span className="text-xs text-muted-foreground">© 2026 Centro Infantil e Externato EUNIJOPA</span>
         </div>
         <div className="flex flex-wrap items-center justify-center gap-4 text-xs text-muted-foreground">
           <Link to="/features" className="hover:text-foreground">Funcionalidades</Link>
@@ -67,7 +67,7 @@ export function FeaturesPage() {
         <div className="mx-auto max-w-5xl">
           <div className="text-center mb-10">
             <h1 className="font-heading text-3xl md:text-4xl font-bold text-foreground">Uma plataforma. Todos os perfis.</h1>
-            <p className="mt-3 text-sm md:text-base text-muted-foreground max-w-2xl mx-auto">O Portal do Colégio Deus Connosco organiza experiências dedicadas para alunos, famílias, professores e equipas administrativas num único sistema.</p>
+            <p className="mt-3 text-sm md:text-base text-muted-foreground max-w-2xl mx-auto">O Portal do Centro Infantil e Externato EUNIJOPA organiza experiências dedicadas para alunos, famílias, professores e equipas administrativas num único sistema.</p>
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
             {personas.map(p => (
@@ -111,13 +111,13 @@ export function ContactPage() {
         <div className="mx-auto max-w-4xl">
           <div className="text-center mb-8">
             <h1 className="font-heading text-3xl md:text-4xl font-bold text-foreground">Falar connosco</h1>
-            <p className="mt-2 text-sm text-muted-foreground">Demonstração do fluxo de contacto institucional do Colégio Deus Connosco.</p>
+            <p className="mt-2 text-sm text-muted-foreground">Demonstração do fluxo de contacto institucional do Centro Infantil e Externato EUNIJOPA.</p>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
             {[
-              { label: 'Instituição', value: 'Colégio Deus Connosco' },
-              { label: 'Instagram', value: '@colegio_deus_connosco.mz' },
-              { label: 'Campanha', value: 'Inscrições 2027' },
+              { label: 'Instituição', value: 'Centro Infantil e Externato EUNIJOPA' },
+              { label: 'Telefone', value: '+258 84 078 0064' },
+              { label: 'Campanha', value: 'Inscrições 2026' },
             ].map(c => (
               <div key={c.label} className="rounded-xl border border-border bg-card p-4">
                 <p className="text-[11px] uppercase tracking-wider text-muted-foreground">{c.label}</p>
