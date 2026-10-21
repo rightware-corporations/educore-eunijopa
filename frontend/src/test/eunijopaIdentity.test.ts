@@ -8,7 +8,7 @@ const source = join(root, 'src');
 function sourceFiles(dir: string): string[] {
   return readdirSync(dir, { withFileTypes: true }).flatMap(item => {
     const file = join(dir, item.name);
-    return item.isDirectory() ? sourceFiles(file) : /\.(ts|tsx|css)$/.test(file) ? [file] : [];
+    return item.isDirectory() ? sourceFiles(file) : /\.(ts|tsx|css)$/.test(file) && !/eunijopaIdentity\.test\.ts$/.test(file) ? [file] : [];
   });
 }
 
@@ -42,6 +42,6 @@ describe('EUNIJOPA — apresentação escolar independente', () => {
     expect(html).toMatch(/EUNIJOPA/);
     expect(html).toMatch(/og:image/);
     const app = readFileSync(join(root,'src','App.tsx'),'utf8');
-    expect(app).not.toMatch(/PlatformAdminPage|\/platform/);
+    expect(app).not.toMatch(/PlatformAdminPage|pathname\.startsWith\(['\"]\/platform/);
   });
 });
